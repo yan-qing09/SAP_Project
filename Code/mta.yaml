@@ -1,0 +1,121 @@
+_schema-version: 3.3.0
+ID: budgetCostTracking
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: budgetCostTracking-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: budgetCostTracking-auth
+  - name: budgetCostTracking-db
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    readiness-health-check-http-endpoint: /health
+    readiness-health-check-type: http
+  build-parameters:
+    builder: npm
+- name: budgetCostTracking-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: budgetCostTracking-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: budgetCostTracking
+  type: approuter.nodejs
+  path: app/router
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: budgetCostTracking-auth
+  - name: budgetCostTracking-destination-service
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: budgetCostTracking-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: budgetCostTracking-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - budgetcosttracking.zip
+      name: budgetcosttracking
+      target-path: resources/
+- name: budgetcosttracking
+  type: html5
+  path: app/budget-cost-tracking
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: budgetCostTracking-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: budgetCostTracking-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: budgetCostTracking-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: budgetCostTracking-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: budgetCostTracking-html5-service
+    service-plan: app-host
+- name: budgetCostTracking-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: budgetCostTracking-destination-service
+    service-plan: lite
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

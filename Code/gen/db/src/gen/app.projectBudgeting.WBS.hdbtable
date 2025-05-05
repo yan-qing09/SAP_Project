@@ -1,0 +1,12 @@
+COLUMN TABLE app_projectBudgeting_WBS (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  wbsName NVARCHAR(100),
+  allocatedBudget DECIMAL(10, 2),
+  actualCost DECIMAL(10, 2) DEFAULT 0,
+  project_ID NVARCHAR(36),
+  PRIMARY KEY(ID)
+)

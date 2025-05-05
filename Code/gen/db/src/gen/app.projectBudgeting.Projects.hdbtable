@@ -1,0 +1,11 @@
+COLUMN TABLE app_projectBudgeting_Projects (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  projectName NVARCHAR(100),
+  totalBudget DECIMAL(10, 2) DEFAULT 0,
+  totalActualCost DECIMAL(10, 2) DEFAULT 0,
+  PRIMARY KEY(ID)
+)

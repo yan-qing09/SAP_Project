@@ -1,0 +1,10 @@
+VIEW ProjectBudgetingService_Resources AS SELECT
+  Resources_0.ID,
+  Resources_0.createdAt,
+  Resources_0.createdBy,
+  Resources_0.modifiedAt,
+  Resources_0.modifiedBy,
+  Resources_0.resourceType,
+  Resources_0.resourceCost,
+  Resources_0.wbs_ID
+FROM app_projectBudgeting_Resources AS Resources_0

@@ -1,0 +1,10 @@
+VIEW ProjectBudgetingService_Projects AS SELECT
+  Projects_0.ID,
+  Projects_0.createdAt,
+  Projects_0.createdBy,
+  Projects_0.modifiedAt,
+  Projects_0.modifiedBy,
+  Projects_0.projectName,
+  Projects_0.totalBudget,
+  Projects_0.totalActualCost
+FROM app_projectBudgeting_Projects AS Projects_0

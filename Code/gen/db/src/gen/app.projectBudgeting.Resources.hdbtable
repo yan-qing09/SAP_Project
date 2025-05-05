@@ -1,0 +1,11 @@
+COLUMN TABLE app_projectBudgeting_Resources (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  resourceType NVARCHAR(50),
+  resourceCost DECIMAL(10, 2),
+  wbs_ID NVARCHAR(36),
+  PRIMARY KEY(ID)
+)

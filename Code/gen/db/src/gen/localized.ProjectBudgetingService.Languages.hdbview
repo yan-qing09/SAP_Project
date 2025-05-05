@@ -1,0 +1,5 @@
+VIEW localized_ProjectBudgetingService_Languages AS SELECT
+  Languages_0.name,
+  Languages_0.descr,
+  Languages_0.code
+FROM localized_sap_common_Languages AS Languages_0

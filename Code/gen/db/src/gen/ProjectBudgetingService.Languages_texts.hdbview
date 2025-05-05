@@ -1,0 +1,6 @@
+VIEW ProjectBudgetingService_Languages_texts AS SELECT
+  texts_0.locale,
+  texts_0.name,
+  texts_0.descr,
+  texts_0.code
+FROM sap_common_Languages_texts AS texts_0

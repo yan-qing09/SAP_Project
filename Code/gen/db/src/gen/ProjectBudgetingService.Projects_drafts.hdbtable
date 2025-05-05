@@ -1,0 +1,15 @@
+COLUMN TABLE ProjectBudgetingService_Projects_drafts (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP NULL,
+  createdBy NVARCHAR(255) NULL,
+  modifiedAt TIMESTAMP NULL,
+  modifiedBy NVARCHAR(255) NULL,
+  projectName NVARCHAR(100) NULL,
+  totalBudget DECIMAL(10, 2) NULL DEFAULT 0,
+  totalActualCost DECIMAL(10, 2) NULL DEFAULT 0,
+  IsActiveEntity BOOLEAN,
+  HasActiveEntity BOOLEAN,
+  HasDraftEntity BOOLEAN,
+  DraftAdministrativeData_DraftUUID NVARCHAR(36) NOT NULL,
+  PRIMARY KEY(ID)
+)

@@ -1,0 +1,11 @@
+VIEW ProjectBudgetingService_WBS AS SELECT
+  WBS_0.ID,
+  WBS_0.createdAt,
+  WBS_0.createdBy,
+  WBS_0.modifiedAt,
+  WBS_0.modifiedBy,
+  WBS_0.wbsName,
+  WBS_0.allocatedBudget,
+  WBS_0.actualCost,
+  WBS_0.project_ID
+FROM app_projectBudgeting_WBS AS WBS_0

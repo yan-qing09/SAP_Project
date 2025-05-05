@@ -1,0 +1,101 @@
+<mvc:View 
+    controllerName="budgetcosttracking.controller.BudgetCostPage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:m="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards">
+    
+    <!-- Define the Page control under sap.m namespace -->
+    <m:Page id="page23" title="{i18n>title}">
+        <m:content>
+            <!-- First Card for Budget and Cost Tracking Title -->
+            <f:Card class="customCardMargin" width="98%">
+                <f:header>
+                    <card:Header title="Budget and Cost Tracking" />
+                </f:header>
+            </f:Card>
+
+            <!-- Second Card for Budget and Cost Tracking Tables -->
+            <f:Card class="customBudgetCardMargin" width="98%">
+                <f:content>
+                    <!-- VBox to group the two tables -->
+                    <m:VBox>
+                        <!-- First Table for Budget and Cost -->
+                        <m:Table id="budgetTable2" inset="false" items="{/WBS}" class="page-padding">
+                            <m:columns>
+                                <m:Column width="30%">
+                                    <m:Text text="WBS Element" />
+                                </m:Column>
+                                <m:Column width="15%">
+                                    <m:Text text="Budget" />
+                                </m:Column>
+                                <m:Column width="15%">
+                                    <m:Text text="Actual Cost" />
+                                </m:Column>
+                                <m:Column width="15%">
+                                    <m:Text text="Variance" />
+                                </m:Column>
+                                <m:Column width="10%">
+                                    <m:Text text="Flag" />
+                                </m:Column>
+                            </m:columns>
+                            <m:items>
+                                <m:ColumnListItem>
+                                    <m:cells>
+                                        <m:Text text="{wbsName}" />
+                                        <m:Text text="{allocatedBudget}" />
+                                        <m:Input value="{actualCost}" liveChange=".onLiveChange" type="Number" />
+                                        <m:Text text="{= ${allocatedBudget} &amp;&amp; ${actualCost} ? (${allocatedBudget} - ${actualCost}) : 'Unknown' }" />
+                                        <m:ObjectStatus 
+                                            text="{= ${allocatedBudget} &amp;&amp; ${actualCost} ? (${allocatedBudget} - ${actualCost} > 0 ? 'Underbudget' : 'Overrun') : 'Unknown' }"
+                                            state="{= ${allocatedBudget} &amp;&amp; ${actualCost} ? (${allocatedBudget} - ${actualCost} > 0 ? 'Success' : 'Error') : 'None' }" 
+                                        />
+                                    </m:cells>
+                                </m:ColumnListItem>
+                            </m:items>
+                        </m:Table>
+
+                        <!-- Total Summary Table -->
+                        <m:Table id="totalTable2" inset="false" class="page-padding">
+                            <m:columns>
+                                <m:Column width="30%">
+                                    <m:Text text="Total" />
+                                </m:Column>
+                                <m:Column width="15%">
+                                    <m:Text text="{/TotalBudget}" />
+                                </m:Column>
+                                <m:Column width="15%">
+                                    <m:Text text="{/TotalActualCost}" />
+                                </m:Column>
+                                <m:Column width="15%">
+                                    <m:Text text="{/TotalVariance}" />
+                                </m:Column>
+                                <m:Column width="10%">
+                                    <m:Text text="" />
+                                </m:Column>
+                            </m:columns>
+                            <m:items>
+                                <m:ColumnListItem>
+                                    <m:cells>
+                                        <m:Text text="" />
+                                        <m:Text text="" />
+                                        <m:Text text="" />
+                                        <m:Text text="" />
+                                    </m:cells>
+                                </m:ColumnListItem>
+                            </m:items>
+                        </m:Table>
+
+                        <!-- Continue Button -->
+                        <m:VBox width="100%" class="sapUiLargeMarginTop">
+                            <m:HBox justifyContent="End" alignItems="Center" class="center-button">
+                                <m:Button text="Continue" type="Emphasized" press="onContinuePress"/>
+                            </m:HBox>
+                        </m:VBox>
+                    </m:VBox>
+                </f:content>
+            </f:Card>
+        </m:content>
+    </m:Page>
+</mvc:View>

@@ -1,0 +1,180 @@
+<mvc:View controllerName="budgetcosttracking.controller.FinancialPerformanceReport"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:m="sap.m"
+    xmlns:suite="sap.suite.ui.microchart"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:f="sap.f"
+	xmlns:card="sap.f.cards"
+    xmlns:layout="sap.ui.layout">
+    
+    <m:Page id="page1" title="{i18n>title}">
+        <m:content>
+            <!-- Single Card -->
+            <f:Card class="customCardMargin" width="98%">
+                <f:header>
+                    <card:Header title="Financial Performance Report" />
+                </f:header>
+            </f:Card>
+
+            <f:Card class="customCardMargin" width="98%">
+                <f:content>
+                    <m:VBox class="sapUiSmallMargin">
+                        <!-- First Row: Key Metrics -->
+                        <layout:Grid defaultSpan="L3 M3 S6" hSpacing="2" vSpacing="0" width="100%">
+                            <!-- First Card -->
+                            <f:Card class="customMiniCardMargin" width="100%">
+                                <f:header>
+                                    <card:Header title="Total Budget:" subtitle="Total allocated budget for the project."/>
+                                </f:header>
+                                <f:content>
+                                    <m:VBox class="centerText">
+                                        <m:Text class="largeText" text="{path: 'FinancialDataModel>/totalBudget', formatter: '.formatCurrency'}" />
+                                    </m:VBox>
+                                </f:content>
+                            </f:Card>
+                            
+                            <!-- Second Card -->
+                            <f:Card class="customMiniCardMargin" width="100%">
+                                <f:header>
+                                    <card:Header title="Total Budget Remaining:" subtitle="Remaining budget after expenses."/>
+                                </f:header>
+                                <f:content>
+                                    <m:VBox class="centerText">
+                                        <m:Text class="largeText" text="{path: 'FinancialDataModel>/remainingBudget', formatter: '.formatCurrency'}" />
+                                    </m:VBox>
+                                </f:content>
+                            </f:Card>
+
+                            <!-- Third Card -->
+                            <f:Card class="customMiniCardMargin" width="100%">
+                                <f:header>
+                                    <card:Header title="Overall Variance:" subtitle="Difference between budget and actual cost."/>
+                                </f:header>
+                                <f:content>
+                                    <m:VBox class="centerText">
+                                        <m:Text class="largeText" text="{path: 'FinancialDataModel>/totalVariance', formatter: '.formatCurrency'}" />
+                                    </m:VBox>
+                                </f:content>
+                            </f:Card>
+
+                            <!-- Fourth Card -->
+                            <f:Card class="customMiniCardMargin" width="100%">
+                                <f:header>
+                                    <card:Header title="Overall Percentage Variance:" subtitle="Percentage difference between budget and actual cost."/>
+                                </f:header>
+                                <f:content>
+                                    <m:VBox class="centerText">
+                                        <m:Text class="largeText" text="{path: 'FinancialDataModel>/variancePercentage', formatter: '.formatPercentage'}" />
+                                    </m:VBox>
+                                </f:content>
+                            </f:Card>
+                        </layout:Grid>
+
+                        <!-- Second Row: Financial Status and Budget Distribution -->
+                        <layout:Grid defaultSpan="L6 M6 S12" hSpacing="2" vSpacing="0" width="100%">
+                            <!-- Left Card: Overall Financial Status for each project -->
+                            <f:Card class="customSmallCardMargin" width="100%">
+                                <f:content>
+                                    <m:Panel headerText="Overall Project Financial Status: {= ${FinancialDataModel>/totalActualCost} > ${FinancialDataModel>/totalBudget} ? 'Over Budget' : 'Under Budget' }">
+                                        <m:HBox width="100%" height="15rem" alignItems="Center" justifyContent="SpaceBetween">
+                                            <suite:InteractiveDonutChart>
+                                                <suite:InteractiveDonutChartSegment
+                                                    label="Budget Used"
+                                                    value="{FinancialDataModel>/totalActualCost}"
+                                                    displayedValue="{FinancialDataModel>/percentageBudgetUsed} %" />
+                                                <suite:InteractiveDonutChartSegment
+                                                    label="Remaining Budget"
+                                                    value="{FinancialDataModel>/remainingBudget}"
+                                                    displayedValue="{FinancialDataModel>/percentageRemainingBudget} %" />
+                                            </suite:InteractiveDonutChart>
+                                        </m:HBox>
+                                    </m:Panel>
+                                </f:content>
+                            </f:Card>
+
+                            <!-- Right Card: Budget Distribution -->
+                            <f:Card class="customSmallCardMargin" width="100%">
+                                <f:content>
+                                    <m:Panel headerText="Budget Distribution by WBS Elements">
+                                        <m:VBox width="100%">
+                                            <viz:VizFrame 
+                                                id="idBudgetPieChart" 
+                                                height="15rem" 
+                                                width="100%" 
+                                                vizType="pie"
+                                                uiConfig="{applicationSet:'fiori'}"
+                                                vizProperties="{ title: {visible : false}, dataLabel: {visible: true}, plotArea: {colorPalette: ['#6EC1E4', '#A8D5BA', '#6FBFB6', '#F4D06F', '#F4A300', '#B79BE5']}}">
+                                                <viz:dataset>
+                                                    <viz.data:FlattenedDataset data="{WBSDataModel>/WBSData}">
+                                                        <viz.data:dimensions>
+                                                            <viz.data:DimensionDefinition name="WBS" value="{WBS}" />
+                                                        </viz.data:dimensions>
+                                                        <viz.data:measures>
+                                                            <viz.data:MeasureDefinition name="Budget Used Percentage" value="{PercentageBudget}" />
+                                                        </viz.data:measures>
+                                                    </viz.data:FlattenedDataset>
+                                                </viz:dataset>
+                                                <viz:feeds>
+                                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Budget Used Percentage" />
+                                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="WBS" />
+                                                </viz:feeds>
+                                            </viz:VizFrame>
+                                        </m:VBox>
+                                    </m:Panel>
+                                </f:content>
+                            </f:Card>
+                        </layout:Grid>
+
+                        <!-- Third Row: Budget vs. Actual Costs -->
+                        <layout:Grid defaultSpan="L12 M12 S12" hSpacing="2" vSpacing="0" width="100%">
+                            <f:Card class="customSmallCardMargin" width="100%">
+                                <f:content>
+                                    <viz:VizFrame id="varianceBarChart" 
+                                        uiConfig="{applicationSet:'fiori'}"
+                                        width="100%" 
+                                        vizType="stacked_bar" 
+                                        vizProperties="{ title: {text : 'Compare Budget VS Actual Costs for each WBS Element', visible : true}}">
+                                    
+                                        <viz:dataset>
+                                            <viz.data:FlattenedDataset data="{WBSDataModel>/WBSData}">
+                                                <viz.data:dimensions>
+                                                    <viz.data:DimensionDefinition name="WBS" value="{WBS}" />
+                                                </viz.data:dimensions>
+                                                <viz.data:measures>
+                                                    <viz.data:MeasureDefinition name="Actual Cost" value="{ActualCost}" />
+                                                    <viz.data:MeasureDefinition name="Remaining Budget" value="{RemainingBudget}" />
+                                                </viz.data:measures>
+                                            </viz.data:FlattenedDataset>
+                                        </viz:dataset>
+
+                                        <viz:feeds>
+                                            <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Actual Cost" />
+                                            <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Remaining Budget" />
+                                            <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="WBS" />
+                                            <viz.feeds:FeedItem uid="color" type="Measure" values="Remaining Budget" />
+                                        </viz:feeds>
+                                        <viz:dependents>
+                                            <viz:Popover id="idPopOver"></viz:Popover>
+                                        </viz:dependents>
+                                    </viz:VizFrame>
+                                </f:content>
+                            </f:Card>
+                        </layout:Grid>
+
+                        <m:VBox width="100%" class="sapUiLargeMarginTop">
+                            <m:HBox justifyContent="End" alignItems="Center" class="center-button">
+                                <m:Button text="Back" 
+                                        icon="sap-icon://nav-back" 
+                                        type="Emphasized" 
+                                        press="onBackToBudgetCostPage"/>
+                            </m:HBox>
+                        </m:VBox>
+
+                    </m:VBox>  
+                </f:content>
+            </f:Card>
+        </m:content>
+    </m:Page>
+</mvc:View>

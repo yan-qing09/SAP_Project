@@ -1,0 +1,10 @@
+{
+    "WBS": [
+        { "WBS_ID": "WBS001", "AllocatedAmount": 10, "CostValue": 100, "ActualCost": "", "Variance": "" },
+        { "WBS_ID": "WBS002", "AllocatedAmount": 20, "CostValue": 200, "ActualCost": "", "Variance": "" },
+        { "WBS_ID": "WBS003", "AllocatedAmount": 30, "CostValue": 300, "ActualCost": "", "Variance": "" }
+    ],
+    "TotalBudget": 0,
+    "TotalActualCost": 0,
+    "TotalVariance": 0
+  }

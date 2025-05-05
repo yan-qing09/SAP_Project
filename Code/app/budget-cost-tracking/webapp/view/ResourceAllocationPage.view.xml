@@ -1,0 +1,16 @@
+<mvc:View controllerName="budgetcosttracking.controller.ResourceAllocationPage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:m="sap.m">
+    <m:Page id="page2" title="{i18n>title}">
+        <m:content>
+            <!-- Add your content here -->
+
+            <!-- Next Button -->
+            <m:VBox width="100%" class="sapUiLargeMarginTop">
+                <m:HBox justifyContent="End" alignItems="Center" class="center-button">
+                    <m:Button text="Continue" type="Emphasized" press="onNextPress"/>
+                </m:HBox>
+            </m:VBox>
+        </m:content>
+    </m:Page>
+</mvc:View>
